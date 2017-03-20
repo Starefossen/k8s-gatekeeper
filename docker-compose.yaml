@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  web:
+    image: ekarlso/gatekeeper
+    ports:
+    - 5081
+    links:
+    - mysql
+    volumes:
+    - ./gatekeeper.ini:/config/gatekeeper.ini
+    command: gatekeeper-api --config-file /config/gatekeeper.ini
+    network_mode: bridge
+  mysql:
+    image: mysql
+    environment:
+    - MYSQL_DATABASE=gatekeeper
+    - MYSQL_USER=gatekeeper
+    - MYSQL_PASSWORD=gatekeeper
+    network_mode: bridge
