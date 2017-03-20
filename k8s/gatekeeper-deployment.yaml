@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gatekeeper
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        service: gatekeeper
+    spec:
+      containers:
+      - args:
+        - gatekeeper-api
+        - --config-file
+        - /config/gatekeeper.ini
+        image: ekarlso/gatekeeper
+        name: gatekeeper
+        ports:
+        - containerPort: 5081
+        resources: {}
+        volumeMounts:
+        - mountPath: /config
+          name: gatekeeper
+      restartPolicy: Always
+      volumes:
+      - name: gatekeeper
+        configMap:
+          name: gatekeeper
